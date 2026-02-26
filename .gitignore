@@ -1,0 +1,37 @@
+# Dependencies
+frontend/node_modules/
+api/vendor/
+
+# Build outputs
+frontend/dist/
+api/bin/
+
+# Environment files
+.env
+.env.local
+.env.production
+api/.env
+
+# System prompt content (NEVER commit the real one)
+system-prompt/system-prompt.md
+!system-prompt/system-prompt.example.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Terraform
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/*.tfvars
+infra/.terraform.lock.hcl
+
+# Logs
+*.log
