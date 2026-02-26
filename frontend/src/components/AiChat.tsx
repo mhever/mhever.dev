@@ -2,6 +2,34 @@ import { useState, useRef, useEffect } from 'react'
 import { chatSuggestions } from '../content'
 import type { ChatMessage } from '../types'
 
+function parseMarkdown(text: string): string {
+  // Escape HTML to prevent injection
+  let s = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
+  // Bold and italic
+  s = s
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+
+  // Consecutive "- …" lines → <ul><li>…</li></ul>
+  s = s.replace(/((?:(?:^|\n)- .+)+)/g, (block) => {
+    const items = block
+      .trim()
+      .split('\n')
+      .map((line) => `<li>${line.replace(/^- /, '')}</li>`)
+      .join('')
+    return `<ul>${items}</ul>`
+  })
+
+  // Remaining newlines → <br>
+  s = s.replace(/\n/g, '<br>')
+
+  return s
+}
+
 interface AiChatProps {
   onClose: () => void
 }
@@ -102,7 +130,9 @@ export default function AiChat({ onClose }: AiChatProps) {
         <div className="chat-messages">
           {messages.map((msg, i) => (
             <div key={i} className={`chat-message ${msg.role}`}>
-              {msg.content}
+              {msg.role === 'assistant'
+                ? <span dangerouslySetInnerHTML={{ __html: parseMarkdown(msg.content) }} />
+                : msg.content}
             </div>
           ))}
 
