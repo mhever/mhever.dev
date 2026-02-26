@@ -49,7 +49,7 @@ Personal portfolio site with AI-powered experience exploration and fit assessmen
 ## Local Development
 
 ### Prerequisites
-- Go 1.21+
+- Go 1.25+
 - Node.js 20+
 - npm
 
