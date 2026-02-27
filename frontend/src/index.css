@@ -29,6 +29,28 @@
   --transition: 200ms ease;
 }
 
+[data-theme="light"] {
+  --bg-primary: #f5f6f8;
+  --bg-secondary: #ffffff;
+  --bg-elevated: #eef0f3;
+  --bg-hover: #e4e7ec;
+
+  --text-primary: #1a1f2e;
+  --text-secondary: #4a5568;
+  --text-muted: #9aa3b0;
+
+  --accent: #c96c00;
+  --accent-dim: #a85800;
+  --accent-glow: rgba(201, 108, 0, 0.1);
+
+  --border: #dde1e8;
+  --border-accent: #c8cdd6;
+
+  --success: #1e9e68;
+  --warning: #b07a1a;
+  --error: #b03030;
+}
+
 *,
 *::before,
 *::after {

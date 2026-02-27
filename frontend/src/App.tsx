@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Hero from './components/Hero'
+
 import Experience from './components/Experience'
 import Skills from './components/Skills'
 import Testimonials from './components/Testimonials'
@@ -12,6 +13,11 @@ import Admin from './components/Admin'
 
 export default function App() {
   const [chatOpen, setChatOpen] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   // Simple hash routing for admin page
   const [page] = useState(() => window.location.hash)
@@ -26,6 +32,30 @@ export default function App() {
 
   return (
     <>
+      <button
+        onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+        title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        style={{
+          position: 'fixed',
+          top: '16px',
+          right: '16px',
+          zIndex: 200,
+          background: 'var(--bg-elevated)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-sm)',
+          color: 'var(--text-secondary)',
+          cursor: 'pointer',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.8rem',
+          padding: '8px 12px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          transition: 'all var(--transition)',
+        }}
+      >
+        {theme === 'dark' ? '☀ light' : '☾ dark'}
+      </button>
       <div className="container" style={{ paddingTop: '48px', paddingBottom: '80px' }}>
         <Hero onChatOpen={() => setChatOpen(true)} />
 
