@@ -94,7 +94,10 @@ resource "azurerm_key_vault_secret" "admin_password" {
 resource "azurerm_static_web_app" "frontend" {
   name                = "${var.project_name}-web"
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  # would have been 
+  # location            = "azurerm_resource_group.main.location"
+  # but resource type is only available in 'westus2,centralus,eastus2,westeurope,eastasia'
+  location            = "eastus2"
   sku_tier            = "Free"
   sku_size            = "Free"
 

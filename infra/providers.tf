@@ -8,13 +8,12 @@ terraform {
     }
   }
 
-  # Uncomment to use Azure Storage backend for state
-  # backend "azurerm" {
-  #   resource_group_name  = "tfstate"
-  #   storage_account_name = "mhsitetfstate"
-  #   container_name       = "tfstate"
-  #   key                  = "marton-site.tfstate"
-  # }
+  backend "azurerm" {
+    resource_group_name  = "tfstate"
+    storage_account_name = "mhsitetfstate"
+    container_name       = "tfstate"
+    key                  = "marton-site.tfstate"
+  }
 }
 
 provider "azurerm" {
