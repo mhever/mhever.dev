@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Hero from './components/Hero'
 import Experience from './components/Experience'
 import Skills from './components/Skills'
+import Testimonials from './components/Testimonials'
 import Certifications from './components/Certifications'
 import HomeLab from './components/HomeLab'
 import Education from './components/Education'
@@ -39,6 +40,11 @@ export default function App() {
         </section>
 
         <section className="section">
+          <div className="section-label">Testimonials</div>
+          <Testimonials />
+        </section>
+
+        <section className="section">
           <div className="section-label">Certifications</div>
           <Certifications />
         </section>
@@ -48,7 +54,7 @@ export default function App() {
           <HomeLab />
         </section>
 
-        <section className="section">
+        <section id="fit-assessment" className="section">
           <div className="section-label">Fit Assessment</div>
           <FitAssessment />
         </section>

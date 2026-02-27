@@ -58,6 +58,9 @@ export default function Hero({ onChatOpen }: HeroProps) {
           <span style={{ fontSize: '1rem' }}>⟩</span>
           Ask AI about my experience
         </button>
+        <a className="btn btn-accent" href="#fit-assessment">
+          Analyze Fit
+        </a>
         <a className="btn" href={profile.linkedin} target="_blank" rel="noopener">
           LinkedIn
         </a>
