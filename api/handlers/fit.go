@@ -46,6 +46,8 @@ func (d *Deps) HandleFit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.Body = http.MaxBytesReader(w, r.Body, 64*1024)
+
 	var req fitRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -72,11 +74,7 @@ func (d *Deps) HandleFit(w http.ResponseWriter, r *http.Request) {
 	// Use system prompt + fit prefix
 	fullSystem := d.SystemPrompt + "\n\n" + fitPromptPrefix
 
-	// Temporarily swap system prompt for fit assessment
-	originalPrompt := d.SystemPrompt
-	d.SystemPrompt = fullSystem
-	response, err := d.callAnthropic(messages)
-	d.SystemPrompt = originalPrompt
+	response, err := d.callAnthropic(fullSystem, messages)
 
 	if err != nil {
 		d.Logger.Log(storage.LogEntry{

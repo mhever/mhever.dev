@@ -109,13 +109,13 @@ func main() {
 
 	// Routes
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/chat", chain(deps.HandleChat, limiter.Limit, middleware.CORS))
-	mux.HandleFunc("/api/fit", chain(deps.HandleFit, limiter.Limit, middleware.CORS))
-	mux.HandleFunc("/api/admin/logs", chain(deps.HandleAdminLogs, middleware.CORS))
-	mux.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
+	mux.HandleFunc("/api/chat", chain(deps.HandleChat, middleware.SecurityHeaders, limiter.Limit, middleware.CORS))
+	mux.HandleFunc("/api/fit", chain(deps.HandleFit, middleware.SecurityHeaders, limiter.Limit, middleware.CORS))
+	mux.HandleFunc("/api/admin/logs", chain(deps.HandleAdminLogs, middleware.SecurityHeaders, middleware.CORS))
+	mux.HandleFunc("/api/health", chain(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"status":"ok"}`))
-	})
+	}, middleware.SecurityHeaders))
 
 	server := &http.Server{
 		Addr:         ":" + port,

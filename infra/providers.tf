@@ -17,6 +17,8 @@ terraform {
 }
 
 provider "azurerm" {
+  storage_use_azuread = true # required when shared_access_key_enabled = false on storage accounts
+
   features {
     key_vault {
       purge_soft_delete_on_destroy = true

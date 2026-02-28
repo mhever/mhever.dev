@@ -26,6 +26,10 @@ resource "azurerm_storage_account" "main" {
   account_replication_type        = "LRS"
   min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
+  # shared_access_key_enabled = false is not possible with azurerm 3.x — the provider
+  # uses key auth for Table ACL reads regardless of storage_use_azuread. The Function
+  # App uses managed identity (storage_uses_managed_identity = true) and has no key in
+  # app_settings, so shared keys are present but never used by the application.
 
   tags = azurerm_resource_group.main.tags
 }
@@ -37,18 +41,71 @@ resource "azurerm_storage_container" "config" {
   container_access_type = "private"
 }
 
+# Blob container for function app deployment packages
+resource "azurerm_storage_container" "deployments" {
+  name                  = "deployments"
+  storage_account_name  = azurerm_storage_account.main.name
+  container_access_type = "private"
+}
+
+# Function App package zip — re-uploaded whenever api/deploy.zip changes
+# Build first: cd api && GOOS=linux GOARCH=amd64 go build -o handler . && zip -r deploy.zip handler host.json chat/ fit/ health/ adminlogs/
+resource "azurerm_storage_blob" "function_package" {
+  name                   = "handler.zip"
+  storage_account_name   = azurerm_storage_account.main.name
+  storage_container_name = azurerm_storage_container.deployments.name
+  type                   = "Block"
+  source                 = "${path.module}/../api/deploy.zip"
+  content_md5            = filemd5("${path.module}/../api/deploy.zip")
+}
+
+# Read-only SAS URL for WEBSITE_RUN_FROM_PACKAGE (fixed window avoids regenerating on every plan)
+data "azurerm_storage_account_blob_container_sas" "function_package" {
+  connection_string = azurerm_storage_account.main.primary_connection_string
+  container_name    = azurerm_storage_container.deployments.name
+  https_only        = true
+
+  start  = "2024-01-01"
+  expiry = "2030-01-01"
+
+  permissions {
+    read   = true
+    add    = false
+    create = false
+    write  = false
+    delete = false
+    list   = false
+  }
+}
+
 # Table for usage logs
 resource "azurerm_storage_table" "logs" {
   name                 = "usagelogs"
   storage_account_name = azurerm_storage_account.main.name
 }
 
-resource "azurerm_role_assignment" "function_blob_reader" {
+# Terraform deployer → storage: blob upload/download (needed to manage azurerm_storage_blob resources)
+resource "azurerm_role_assignment" "deployer_blob_contributor" {
   scope                = azurerm_storage_account.main.id
-  role_definition_name = "Storage Blob Data Reader"
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+# Function App managed identity → storage: blob read/write (for runtime deployment packages + Go code)
+resource "azurerm_role_assignment" "function_blob_contributor" {
+  scope                = azurerm_storage_account.main.id
+  role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_linux_function_app.api.identity[0].principal_id
 }
 
+# Function App managed identity → storage: queue (required by Functions runtime)
+resource "azurerm_role_assignment" "function_queue_contributor" {
+  scope                = azurerm_storage_account.main.id
+  role_definition_name = "Storage Queue Data Contributor"
+  principal_id         = azurerm_linux_function_app.api.identity[0].principal_id
+}
+
+# Function App managed identity → storage: table (Go usage logs)
 resource "azurerm_role_assignment" "function_table_contributor" {
   scope                = azurerm_storage_account.main.id
   role_definition_name = "Storage Table Data Contributor"
@@ -66,21 +123,25 @@ resource "azurerm_key_vault" "main" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
 
-  purge_protection_enabled   = false
-  soft_delete_retention_days = 7
+  enable_rbac_authorization  = true
+  purge_protection_enabled   = true
+  soft_delete_retention_days = 7 # cannot be changed after initial creation
 
   tags = azurerm_resource_group.main.tags
 }
 
-# Key Vault access for current user (Terraform deployer)
-resource "azurerm_key_vault_access_policy" "deployer" {
-  key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
+# Terraform deployer: can manage secrets (get, set, delete, list — no purge)
+resource "azurerm_role_assignment" "kv_deployer" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
 
-  secret_permissions = [
-    "Get", "Set", "Delete", "List", "Purge",
-  ]
+# Function App managed identity: read-only secret access
+resource "azurerm_role_assignment" "kv_function_app" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_linux_function_app.api.identity[0].principal_id
 }
 
 # Store secrets
@@ -89,7 +150,7 @@ resource "azurerm_key_vault_secret" "anthropic_key" {
   value        = var.anthropic_api_key
   key_vault_id = azurerm_key_vault.main.id
 
-  depends_on = [azurerm_key_vault_access_policy.deployer]
+  depends_on = [azurerm_role_assignment.kv_deployer]
 }
 
 resource "azurerm_key_vault_secret" "admin_password" {
@@ -97,7 +158,7 @@ resource "azurerm_key_vault_secret" "admin_password" {
   value        = var.admin_password
   key_vault_id = azurerm_key_vault.main.id
 
-  depends_on = [azurerm_key_vault_access_policy.deployer]
+  depends_on = [azurerm_role_assignment.kv_deployer]
 }
 
 # ──────────────────────────────────────────────
@@ -107,7 +168,7 @@ resource "azurerm_key_vault_secret" "admin_password" {
 resource "azurerm_static_web_app" "frontend" {
   name                = "${var.project_name}-web"
   resource_group_name = azurerm_resource_group.main.name
-  # would have been 
+  # would have been
   # location            = "azurerm_resource_group.main.location"
   # but resource type is only available in 'westus2,centralus,eastus2,westeurope,eastasia'
   location = "eastus2"
@@ -157,7 +218,7 @@ resource "azurerm_linux_function_app" "api" {
   https_only          = true
 
   storage_account_name       = azurerm_storage_account.main.name
-  storage_account_access_key = azurerm_storage_account.main.primary_access_key
+  storage_uses_managed_identity = true # no shared keys; managed identity handles all storage access
 
   identity {
     type = "SystemAssigned"
@@ -182,32 +243,14 @@ resource "azurerm_linux_function_app" "api" {
   }
 
   app_settings = {
-    "KEY_VAULT_URL"         = azurerm_key_vault.main.vault_uri
-    "AZURE_STORAGE_ACCOUNT" = azurerm_storage_account.main.name
-    "AZURE_STORAGE_KEY"     = azurerm_storage_account.main.primary_access_key
-    "AZURE_BLOB_CONTAINER"  = azurerm_storage_container.config.name
-    "AZURE_TABLE_NAME"      = azurerm_storage_table.logs.name
-    "RATE_LIMIT_PER_IP"     = tostring(var.rate_limit_per_ip)
-    "RATE_LIMIT_GLOBAL"     = tostring(var.rate_limit_global)
-    "CORS_ORIGIN"           = "https://mhever.dev"
-  }
-
-  lifecycle {
-    ignore_changes = [
-      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
-    ]
+    "KEY_VAULT_URL"              = azurerm_key_vault.main.vault_uri
+    "AZURE_STORAGE_ACCOUNT"      = azurerm_storage_account.main.name
+    "AZURE_TABLE_NAME"           = azurerm_storage_table.logs.name
+    "RATE_LIMIT_PER_IP"          = tostring(var.rate_limit_per_ip)
+    "RATE_LIMIT_GLOBAL"          = tostring(var.rate_limit_global)
+    "CORS_ORIGIN"                = "https://mhever.dev"
+    "WEBSITE_RUN_FROM_PACKAGE"   = "https://${azurerm_storage_account.main.name}.blob.core.windows.net/${azurerm_storage_container.deployments.name}/${azurerm_storage_blob.function_package.name}${data.azurerm_storage_account_blob_container_sas.function_package.sas}"
   }
 
   tags = azurerm_resource_group.main.tags
-}
-
-# Key Vault access for Function App's managed identity
-resource "azurerm_key_vault_access_policy" "function_app" {
-  key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = azurerm_linux_function_app.api.identity[0].tenant_id
-  object_id    = azurerm_linux_function_app.api.identity[0].principal_id
-
-  secret_permissions = [
-    "Get",
-  ]
 }

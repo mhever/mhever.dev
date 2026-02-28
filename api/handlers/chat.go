@@ -53,6 +53,8 @@ func (d *Deps) HandleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.Body = http.MaxBytesReader(w, r.Body, 64*1024)
+
 	var req chatRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -65,18 +67,21 @@ func (d *Deps) HandleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate individual message length
+	// Validate individual messages
 	for _, msg := range req.Messages {
 		if len(msg.Content) > 2000 {
 			http.Error(w, "Message too long (max 2000 chars)", http.StatusBadRequest)
 			return
 		}
+		if msg.Role != "user" && msg.Role != "assistant" {
+			http.Error(w, "Invalid message role", http.StatusBadRequest)
+			return
+		}
 	}
 
 	// Call Anthropic API
-	response, err := d.callAnthropic(req.Messages)
+	response, err := d.callAnthropic(d.SystemPrompt, req.Messages)
 	if err != nil {
-		// Log the error
 		d.Logger.Log(storage.LogEntry{
 			Timestamp: time.Now().UTC(),
 			IP:        getIP(r),
@@ -103,11 +108,12 @@ func (d *Deps) HandleChat(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(chatResponse{Response: response})
 }
 
-func (d *Deps) callAnthropic(messages []chatMessage) (string, error) {
+// callAnthropic sends a request to the Anthropic API with the given system prompt and messages.
+func (d *Deps) callAnthropic(systemPrompt string, messages []chatMessage) (string, error) {
 	body := anthropicRequest{
 		Model:     "claude-haiku-4-5-20251001",
 		MaxTokens: 1024,
-		System:    d.SystemPrompt,
+		System:    systemPrompt,
 		Messages:  messages,
 	}
 

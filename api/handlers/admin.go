@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"crypto/subtle"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -30,10 +31,10 @@ func (d *Deps) HandleAdminLogs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check authorization
+	// Check authorization — constant-time compare prevents timing attacks
 	auth := r.Header.Get("Authorization")
 	token := strings.TrimPrefix(auth, "Bearer ")
-	if token == "" || token != d.AdminPassword {
+	if token == "" || subtle.ConstantTimeCompare([]byte(token), []byte(d.AdminPassword)) != 1 {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
