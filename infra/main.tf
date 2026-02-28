@@ -19,12 +19,13 @@ resource "azurerm_resource_group" "main" {
 # ──────────────────────────────────────────────
 
 resource "azurerm_storage_account" "main" {
-  name                     = replace("${var.project_name}store", "-", "")
-  resource_group_name      = azurerm_resource_group.main.name
-  location                 = azurerm_resource_group.main.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  min_tls_version          = "TLS1_2"
+  name                            = replace("${var.project_name}store", "-", "")
+  resource_group_name             = azurerm_resource_group.main.name
+  location                        = azurerm_resource_group.main.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  min_tls_version                 = "TLS1_2"
+  allow_nested_items_to_be_public = false
 
   tags = azurerm_resource_group.main.tags
 }
@@ -153,6 +154,7 @@ resource "azurerm_linux_function_app" "api" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   service_plan_id     = azurerm_service_plan.api.id
+  https_only          = true
 
   storage_account_name       = azurerm_storage_account.main.name
   storage_account_access_key = azurerm_storage_account.main.primary_access_key
@@ -164,6 +166,8 @@ resource "azurerm_linux_function_app" "api" {
   site_config {
     application_insights_connection_string = azurerm_application_insights.main.connection_string
     application_insights_key               = azurerm_application_insights.main.instrumentation_key
+    ftps_state                             = "Disabled"
+    minimum_tls_version                    = "1.2"
 
     application_stack {
       use_custom_runtime = true
