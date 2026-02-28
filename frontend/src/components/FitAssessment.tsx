@@ -16,7 +16,7 @@ export default function FitAssessment() {
     setScore(null)
 
     try {
-      const res = await fetch('/api/fit', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobDescription: jobDescription.trim() }),

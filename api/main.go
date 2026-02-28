@@ -49,7 +49,13 @@ func loadDotEnv() {
 
 func main() {
 	loadDotEnv()
-	port := os.Getenv("PORT")
+
+	// Azure Functions custom handler uses FUNCTIONS_CUSTOMHANDLER_PORT;
+	// fall back to PORT, then 8080 for local development.
+	port := os.Getenv("FUNCTIONS_CUSTOMHANDLER_PORT")
+	if port == "" {
+		port = os.Getenv("PORT")
+	}
 	if port == "" {
 		port = "8080"
 	}
@@ -66,7 +72,7 @@ func main() {
 	// Load API key (Azure Key Vault in prod, env var locally)
 	apiKey := os.Getenv("ANTHROPIC_API_KEY")
 	if apiKey == "" {
-		vaultURL := os.Getenv("AZURE_KEYVAULT_URL")
+		vaultURL := os.Getenv("KEY_VAULT_URL")
 		if vaultURL != "" {
 			var kvErr error
 			apiKey, kvErr = storage.GetSecret(vaultURL, "anthropic-api-key")
@@ -74,14 +80,14 @@ func main() {
 				log.Fatalf("Failed to get API key from Key Vault: %v", kvErr)
 			}
 		} else {
-			log.Fatal("ANTHROPIC_API_KEY not set and AZURE_KEYVAULT_URL not configured")
+			log.Fatal("ANTHROPIC_API_KEY not set and KEY_VAULT_URL not configured")
 		}
 	}
 
 	// Load admin password
 	adminPassword := os.Getenv("ADMIN_PASSWORD")
 	if adminPassword == "" {
-		vaultURL := os.Getenv("AZURE_KEYVAULT_URL")
+		vaultURL := os.Getenv("KEY_VAULT_URL")
 		if vaultURL != "" {
 			adminPassword, _ = storage.GetSecret(vaultURL, "admin-password")
 		}

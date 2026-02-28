@@ -1,9 +1,14 @@
 package storage
 
 import (
+	"context"
 	"fmt"
+	"io"
 	"log"
 	"os"
+
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 )
 
 // LoadSystemPrompt loads the system prompt from a local file (dev)
@@ -30,37 +35,28 @@ func LoadSystemPrompt() (string, error) {
 }
 
 func loadFromBlobStorage(account string) (string, error) {
-	// TODO: Implement Azure Blob Storage download
-	// container := os.Getenv("AZURE_BLOB_CONTAINER")
-	// if container == "" {
-	//     container = "config"
-	// }
-	//
-	// key := os.Getenv("AZURE_STORAGE_KEY")
-	// cred, err := azblob.NewSharedKeyCredential(account, key)
-	// if err != nil {
-	//     return "", fmt.Errorf("create blob credential: %w", err)
-	// }
-	//
-	// serviceURL := fmt.Sprintf("https://%s.blob.core.windows.net", account)
-	// client, err := azblob.NewClientWithSharedKey(serviceURL, cred, nil)
-	// if err != nil {
-	//     return "", fmt.Errorf("create blob client: %w", err)
-	// }
-	//
-	// resp, err := client.DownloadStream(context.Background(), container, "system-prompt.md", nil)
-	// if err != nil {
-	//     return "", fmt.Errorf("download system prompt: %w", err)
-	// }
-	// defer resp.Body.Close()
-	//
-	// data, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	//     return "", fmt.Errorf("read blob: %w", err)
-	// }
-	//
-	// log.Printf("System prompt loaded from Azure Blob Storage (%d bytes)", len(data))
-	// return string(data), nil
+	cred, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		return "", fmt.Errorf("create credential: %w", err)
+	}
 
-	return "", fmt.Errorf("Azure Blob Storage not yet implemented — set SYSTEM_PROMPT_PATH for local dev")
+	serviceURL := fmt.Sprintf("https://%s.blob.core.windows.net/", account)
+	client, err := azblob.NewClient(serviceURL, cred, nil)
+	if err != nil {
+		return "", fmt.Errorf("create blob client: %w", err)
+	}
+
+	resp, err := client.DownloadStream(context.Background(), "config", "system-prompt.md", nil)
+	if err != nil {
+		return "", fmt.Errorf("download system prompt blob: %w", err)
+	}
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("read blob data: %w", err)
+	}
+
+	log.Printf("System prompt loaded from Azure Blob Storage (%d bytes)", len(data))
+	return string(data), nil
 }
