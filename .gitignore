@@ -30,7 +30,7 @@ Thumbs.db
 infra/.terraform/
 infra/*.tfstate
 infra/*.tfstate.backup
-infra/*.tfvars
+# infra/*.tfvars
 infra/.terraform.lock.hcl
 
 # Logs

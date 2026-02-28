@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+
+# terraform apply -var="anthropic_api_key=$(grep ANTHROPIC_API_KEY ../api/.env | cut -d= -f2)"   -var="admin_password=$(grep ADMIN_PASSWORD ../api/.env | cut -d= -f2)"
+
 TOKEN=$(terraform -chdir=infra output -raw static_web_app_api_key)
 
 echo "=== Waiting for Azure to catch up ==="
@@ -25,7 +28,7 @@ cd ..
 echo "=== Deploying frontend ==="
 cd frontend
 npm run build
-npx @azure/static-web-apps-cli deploy -y ./dist \
+npx @azure/static-web-apps-cli deploy ./dist \
   --deployment-token "$TOKEN" \
   --env production
 cd ..
