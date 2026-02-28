@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { parseMarkdown } from '../utils/parseMarkdown'
 
 export default function FitAssessment() {
   const [jobDescription, setJobDescription] = useState('')
@@ -96,14 +97,14 @@ export default function FitAssessment() {
           <span className={`fit-score ${score}`}>
             {score === 'strong' ? '● Strong Fit' : score === 'moderate' ? '◐ Moderate Fit' : '○ Weak Fit'}
           </span>
-          <div style={{
-            fontSize: '0.9rem',
-            lineHeight: '1.7',
-            color: 'var(--text-secondary)',
-            whiteSpace: 'pre-wrap',
-          }}>
-            {result}
-          </div>
+          <div
+            style={{
+              fontSize: '0.9rem',
+              lineHeight: '1.7',
+              color: 'var(--text-secondary)',
+            }}
+            dangerouslySetInnerHTML={{ __html: parseMarkdown(result) }}
+          />
         </div>
       )}
     </div>
