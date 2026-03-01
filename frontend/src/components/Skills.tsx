@@ -15,12 +15,6 @@ export default function Skills() {
           <div key={s} className="skill-item">{s}</div>
         ))}
       </div>
-      <div className="skill-column gaps">
-        <h3>Not my strength</h3>
-        {skills.gaps.map((s) => (
-          <div key={s} className="skill-item">{s}</div>
-        ))}
-      </div>
     </div>
   )
 }

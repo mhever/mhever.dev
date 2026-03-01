@@ -5,6 +5,8 @@ api/vendor/
 # Build outputs
 frontend/dist/
 api/bin/
+api/handler
+api/deploy.zip
 
 # Environment files
 .env

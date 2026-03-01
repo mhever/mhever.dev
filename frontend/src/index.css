@@ -4,9 +4,9 @@
   --bg-elevated: #181f28;
   --bg-hover: #1d2535;
 
-  --text-primary: #e2e6ec;
-  --text-secondary: #95a0ad;
-  --text-muted: #5c6470;
+  --text-primary: #f8fafc;
+  --text-secondary: #d0dae4;
+  --text-muted: #96a4b0;
 
   --accent: #e8820c;
   --accent-dim: #a85e08;
@@ -496,7 +496,7 @@ code, pre {
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 

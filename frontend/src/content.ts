@@ -40,7 +40,7 @@ export const skills = {
   strong: [
     'Azure Cloud Platform (7+ years)',
     'Azure DevOps CI/CD (SME)',
-    'Go — production systems',
+    'Go - production systems',
     'Terraform IaC',
     'Enterprise platform operations',
     'Tier-3 escalation engineering',
