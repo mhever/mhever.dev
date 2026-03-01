@@ -37,6 +37,10 @@ jobs:
         working-directory: api
         run: go vet ./...
 
+      - name: Vulnerability scan
+        working-directory: api
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+
       - name: Package
         working-directory: api
         run: zip -r deploy.zip handler host.json chat/ fit/ health/ adminlogs/
@@ -48,6 +52,10 @@ jobs:
       - name: Terraform Init
         working-directory: infra
         run: terraform init
+
+      - name: Terraform Validate
+        working-directory: infra
+        run: terraform validate
 
       - name: Terraform Apply
         working-directory: infra
