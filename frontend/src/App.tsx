@@ -106,6 +106,17 @@ export default function App() {
           <a href="https://github.com/mhever/mhever.dev" target="_blank" rel="noopener">
             View source
           </a>
+          {(import.meta.env.VITE_COMMIT_SHA || import.meta.env.VITE_BUILD_DATE) && (
+            <><br />{
+              import.meta.env.VITE_BUILD_DATE
+                ? new Date(import.meta.env.VITE_BUILD_DATE).toISOString().slice(0, 10)
+                : ''
+            }{import.meta.env.VITE_BUILD_DATE && import.meta.env.VITE_COMMIT_SHA ? ' · ' : ''}{
+              import.meta.env.VITE_COMMIT_SHA
+                ? import.meta.env.VITE_COMMIT_SHA.slice(0, 7)
+                : ''
+            }</>
+          )}
         </footer>
       </div>
 
