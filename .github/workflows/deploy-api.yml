@@ -45,7 +45,7 @@ jobs:
         working-directory: api
         run: zip -r deploy.zip handler host.json chat/ fit/ health/ adminlogs/
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: '1.14.5'
 
