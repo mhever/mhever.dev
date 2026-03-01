@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/martonhever/marton-hever.dev/api/handlers"
-	"github.com/martonhever/marton-hever.dev/api/middleware"
-	"github.com/martonhever/marton-hever.dev/api/storage"
+	"github.com/mhever/mhever.dev/api/handlers"
+	"github.com/mhever/mhever.dev/api/middleware"
+	"github.com/mhever/mhever.dev/api/storage"
 )
 
 // loadDotEnv reads key=value pairs from .env and sets them as environment

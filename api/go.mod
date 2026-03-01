@@ -1,4 +1,4 @@
-module github.com/martonhever/marton-hever.dev/api
+module github.com/mhever/mhever.dev/api
 
 go 1.25
 
