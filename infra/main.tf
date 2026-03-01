@@ -84,12 +84,11 @@ resource "azurerm_storage_table" "logs" {
   storage_account_name = azurerm_storage_account.main.name
 }
 
-# Terraform deployer → storage: blob upload/download (needed to manage azurerm_storage_blob resources)
-resource "azurerm_role_assignment" "deployer_blob_contributor" {
-  scope                = azurerm_storage_account.main.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
+# NOTE: The deployer identity (CI service principal or local user) requires:
+#   - Storage Blob Data Contributor on this storage account
+#   - Key Vault Secrets Officer on the key vault
+# These must be granted manually as a one-time bootstrap step — they cannot be
+# managed by Terraform because the deployer needs them to run Terraform.
 
 # Function App managed identity → storage: blob read/write (for runtime deployment packages + Go code)
 resource "azurerm_role_assignment" "function_blob_contributor" {
@@ -130,13 +129,6 @@ resource "azurerm_key_vault" "main" {
   tags = azurerm_resource_group.main.tags
 }
 
-# Terraform deployer: can manage secrets (get, set, delete, list — no purge)
-resource "azurerm_role_assignment" "kv_deployer" {
-  scope                = azurerm_key_vault.main.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
-
 # Function App managed identity: read-only secret access
 resource "azurerm_role_assignment" "kv_function_app" {
   scope                = azurerm_key_vault.main.id
@@ -150,15 +142,12 @@ resource "azurerm_key_vault_secret" "anthropic_key" {
   value        = var.anthropic_api_key
   key_vault_id = azurerm_key_vault.main.id
 
-  depends_on = [azurerm_role_assignment.kv_deployer]
 }
 
 resource "azurerm_key_vault_secret" "admin_password" {
   name         = "admin-password"
   value        = var.admin_password
   key_vault_id = azurerm_key_vault.main.id
-
-  depends_on = [azurerm_role_assignment.kv_deployer]
 }
 
 # ──────────────────────────────────────────────
