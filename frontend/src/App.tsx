@@ -103,7 +103,7 @@ export default function App() {
           letterSpacing: '0.05em',
         }}>
           Built with Go, React, Terraform, and deployed on Azure.{' '}
-          <a href="https://github.com/martonhever/marton-hever.dev" target="_blank" rel="noopener">
+          <a href="https://github.com/mhever/mhever.dev" target="_blank" rel="noopener">
             View source
           </a>
         </footer>
