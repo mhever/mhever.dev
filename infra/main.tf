@@ -223,12 +223,11 @@ resource "azurerm_linux_function_app" "api" {
       use_custom_runtime = true
     }
 
-    cors {
-      allowed_origins = compact([
-        "https://${azurerm_static_web_app.frontend.default_host_name}",
-        var.custom_domain != "" ? "https://${var.custom_domain}" : "",
-      ])
-    }
+    # No cors block here — the Go custom handler owns CORS via its middleware.
+    # Azure Functions' built-in CORS intercepts OPTIONS preflights before they
+    # reach the custom handler, causing 405s for origins not in its list.
+    # With enableForwardingHttpRequest = true, OPTIONS is forwarded to Go which
+    # handles it correctly with the CORS_ORIGIN app setting.
   }
 
   app_settings = {
