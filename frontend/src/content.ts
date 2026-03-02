@@ -284,6 +284,7 @@ export const languages = [
 ]
 
 export const chatSuggestions = [
+  "Tell me about a time vendor support couldn't help",
   'What kind of production systems have you built?',
   'Tell me about your Go experience',
   'How do you handle Kubernetes gaps?',
