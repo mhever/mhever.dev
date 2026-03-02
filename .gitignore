@@ -11,7 +11,7 @@ api/deploy.zip
 # Environment files
 .env
 .env.local
-.env.production
+# .env.production is intentionally committed - it only contains the public API URL (not a secret)
 api/.env
 
 # System prompt content (NEVER commit the real one)
