@@ -17,7 +17,7 @@ export const profile = {
 
 export const technologies = {
   primary: [
-    'Azure', 'Azure DevOps', 'Go', 'Terraform', 'Docker', 'Linux',
+    'Azure', 'Azure DevOps', 'Go', 'Terraform', 'Docker', 'IaC', 'Linux',
     'CI/CD', 'Packer', 'Bash',
   ],
   secondary: [
@@ -57,13 +57,7 @@ export const skills = {
     'Java / Spring (legacy)',
     'TypeScript',
   ],
-  gaps: [
-    'Kubernetes in production',
-    'AWS / GCP',
-    'People management',
-    'Consumer product development',
-    'Mobile development',
-  ],
+  gaps: [],
 }
 
 export const experience: ExperienceRole[] = [
@@ -162,7 +156,8 @@ export const experience: ExperienceRole[] = [
           'Engineered a Dockerized Go deployment gateway from scratch to replace ' +
           'a legacy Java monolith. Architected a custom worker pool with strict ' +
           'per-platform concurrency limits, enforced API-level authentication, ' +
-          'and integrated Bamboo, IBM BPM, and DB2.',
+          'and integrated Bamboo, IBM BPM, and DB2  to automate deployments to legacy ' +
+          'target platforms.',
         context:
           'I started learning Go in 2019 specifically to build this. The existing Java ' +
           'monolith was enormous, hard to maintain, and being retired. Rather than rebuild ' +
@@ -196,7 +191,8 @@ export const experience: ExperienceRole[] = [
         title: 'Build Agent Reliability',
         description:
           'Co-implemented ActiveMQ tuning and custom Java extensions to resolve ' +
-          'vendor defects affecting Bamboo build agent reliability.',
+          'vendor defects affecting Bamboo build agent reliability. Escalation ' +
+          'engineer for Bamboo agents.',
         context:
           'Bamboo agents communicated with the server via ActiveMQ, and under load, ' +
           'agents would sometimes silently disconnect or pick up stale build configurations. ' +
@@ -227,13 +223,7 @@ export const experience: ExperienceRole[] = [
           'This was a team of 5 people building a complete business system from scratch — ' +
           'inventory management, invoicing, webshop, government tax integration, everything. ' +
           'I handled coding plus light operations and automation while a colleague handled ' +
-          'coding plus MySQL administration. After 13 years, I recognized the technology ' +
-          'stack (Java Swing, older frameworks) was not keeping pace with the industry. ' +
-          'In 2018, I had offers from Ericsson (staying in Java development) and Cognizant ' +
-          '(enterprise DevOps with English-language work). I chose Cognizant specifically ' +
-          'for the exposure to enterprise environments and daily English use — a strategic ' +
-          'decision that led to Swiss Re, production Go development, and eventually ' +
-          'relocating to Canada.',
+          'coding plus MySQL administration.',
         tags: ['Java', 'MySQL', 'ERP'],
       },
     ],
