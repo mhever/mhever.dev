@@ -290,4 +290,5 @@ export const chatSuggestions = [
   'How do you handle Kubernetes gaps?',
   'What was your role at Swiss Re?',
   'Describe a difficult technical decision',
+  'How do you keep critical infrastructure stable at scale?',
 ]
