@@ -31,7 +31,7 @@ func (d *Deps) HandleAdminLogs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check authorization — constant-time compare prevents timing attacks
+	// Check authorization - constant-time compare prevents timing attacks
 	auth := r.Header.Get("Authorization")
 	token := strings.TrimPrefix(auth, "Bearer ")
 	if token == "" || subtle.ConstantTimeCompare([]byte(token), []byte(d.AdminPassword)) != 1 {

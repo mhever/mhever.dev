@@ -43,7 +43,7 @@ export default function FitAssessment() {
     <div>
       <p style={{ fontSize: '0.9rem', marginBottom: '16px', lineHeight: '1.6' }}>
         Paste a job description below. The AI will honestly assess whether my background
-        is a good fit — and tell you if it isn't.
+        is a good fit - and tell you if it isn't.
       </p>
 
       <textarea

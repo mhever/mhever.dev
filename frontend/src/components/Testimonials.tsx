@@ -6,8 +6,8 @@ export default function Testimonials() {
         lineHeight: '1.7',
         color: 'var(--text-secondary)',
       }}>
-        Former colleagues from the Swiss Re platform team — architects, engineering directors,
-        and VPs — have shared their experience working with Marton on LinkedIn.
+        Former colleagues from the Swiss Re platform team - architects, engineering directors,
+        and VPs - have shared their experience working with Marton on LinkedIn.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

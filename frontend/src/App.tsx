@@ -6,6 +6,7 @@ import Skills from './components/Skills'
 import Testimonials from './components/Testimonials'
 import Certifications from './components/Certifications'
 import HomeLab from './components/HomeLab'
+import Portfolio from './components/Portfolio'
 import Education from './components/Education'
 import AiChat from './components/AiChat'
 import FitAssessment from './components/FitAssessment'
@@ -82,6 +83,7 @@ export default function App() {
         <section className="section">
           <div className="section-label">Projects</div>
           <HomeLab />
+          <Portfolio />
         </section>
 
         <section id="fit-assessment" className="section">

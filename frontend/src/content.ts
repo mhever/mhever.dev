@@ -80,7 +80,7 @@ export const experience: ExperienceRole[] = [
           'with region-specific configurations. I worked alongside two solution architects ' +
           'who designed the initial system. When one architect left at the end of 2024, ' +
           'I stepped up as the primary SME. The real challenge was maintaining consistency ' +
-          'across all pools while serving different team requirements — some pools needed ' +
+          'across all pools while serving different team requirements - some pools needed ' +
           'specific SDKs, others needed particular network access patterns. Every change ' +
           'had to be carefully validated because a broken build agent means 2,000 developers ' +
           'are blocked.',
@@ -97,10 +97,10 @@ export const experience: ExperienceRole[] = [
           'In an enterprise shop with this many developers, production issues span ' +
           'everything from Azure networking to legacy mainframe connectivity. My role ' +
           'was deep troubleshooting when standard support couldn\'t resolve issues. ' +
-          'This meant understanding the full stack — from how Azure DevOps pipelines ' +
+          'This meant understanding the full stack - from how Azure DevOps pipelines ' +
           'trigger builds, through the agent pool infrastructure I maintained, down to ' +
           'the deployment targets which included mainframes and specialized legacy systems. ' +
-          'The key skill here isn\'t knowing everything — it\'s knowing how to narrow down ' +
+          'The key skill here isn\'t knowing everything - it\'s knowing how to narrow down ' +
           'where the failure is happening across a complex chain of systems.',
         tags: ['Troubleshooting', 'Networking', 'Security'],
       },
@@ -116,12 +116,12 @@ export const experience: ExperienceRole[] = [
           'needed to deploy to legacy platforms (IBM mainframes, PowerCenter) but there was ' +
           'no native integration. Previously, a large Java monolith handled this, but it was ' +
           'being retired. I built a Go gateway from scratch that acted as the bridge. ' +
-          'The HTTP/2 streaming was critical — before my solution, deployments to legacy ' +
+          'The HTTP/2 streaming was critical - before my solution, deployments to legacy ' +
           'targets were a black box where developers would trigger a deploy and just wait. ' +
           'With streaming, they could watch real-time progress in the Azure DevOps UI. ' +
           'The system processed 50-100 requests/day at peak, declining to 30-40/day as ' +
           'legacy platforms were themselves retired. This natural decline was actually a ' +
-          'success metric — it meant modernization was working.',
+          'success metric - it meant modernization was working.',
         tags: ['Go', 'TypeScript', 'HTTP/2', 'Azure DevOps'],
       },
       {
@@ -134,10 +134,10 @@ export const experience: ExperienceRole[] = [
           'The DB2 migration was a pragmatic decision. The Go gateway originally used DB2 ' +
           'because that\'s what the Java monolith it replaced had used. But maintaining a ' +
           'DB2 dependency for what was essentially a read-only lookup table was overkill. ' +
-          'I evaluated Oracle (the Go driver ecosystem was immature — single-developer ' +
+          'I evaluated Oracle (the Go driver ecosystem was immature - single-developer ' +
           'projects wrapping stolen C bindings) and went with SQLite. Clean, zero-dependency, ' +
           'perfect for the read-only use case. The IBM BPM to Camunda Zeebe migration ' +
-          'was similar thinking — replace a heavyweight legacy orchestrator with something ' +
+          'was similar thinking - replace a heavyweight legacy orchestrator with something ' +
           'modern and maintainable. Both changes reduced the operational surface area of the ' +
           'system significantly.',
         tags: ['Go', 'SQLite', 'Camunda Zeebe', 'Migration'],
@@ -162,7 +162,7 @@ export const experience: ExperienceRole[] = [
           'I started learning Go in 2019 specifically to build this. The existing Java ' +
           'monolith was enormous, hard to maintain, and being retired. Rather than rebuild ' +
           'it in Java, I proposed a lightweight Go service. The worker pool design was ' +
-          'critical — different deployment targets had different concurrency constraints. ' +
+          'critical - different deployment targets had different concurrency constraints. ' +
           'A mainframe might handle 2 concurrent deploys, while another target could handle ' +
           '10. The pool enforced these limits at the API level so developers couldn\'t ' +
           'accidentally overwhelm legacy systems. The authentication was enforced per-request ' +
@@ -177,9 +177,9 @@ export const experience: ExperienceRole[] = [
           'Extended functionality, implemented fixes, served as Tier-3 escalation.',
         context:
           'These were custom plugins that enforced governance and compliance for the CI/CD ' +
-          'platform — things like deployment target restrictions, approval workflows, and ' +
+          'platform - things like deployment target restrictions, approval workflows, and ' +
           'artifact management. I didn\'t create them originally but became the primary ' +
-          'maintainer. The hardest part was working with Bamboo\'s internals — it stored ' +
+          'maintainer. The hardest part was working with Bamboo\'s internals - it stored ' +
           'configuration in an Oracle database using a bizarre XML-in-table structure. ' +
           'Debugging production issues meant reverse-engineering these XML constructs. ' +
           'I also created a new plugin to integrate my Go gateway with Bamboo, bridging ' +
@@ -200,7 +200,7 @@ export const experience: ExperienceRole[] = [
           'that worked around vendor bugs we\'d identified. In one case, I wrote a ' +
           '-javaagent instrumentation that hot-patched a critical initialization bug in ' +
           'the Bamboo agent runtime, preventing faulty agents from corrupting build state. ' +
-          'This kind of vendor-internal debugging was a recurring theme — when you\'re ' +
+          'This kind of vendor-internal debugging was a recurring theme - when you\'re ' +
           'responsible for build infrastructure serving thousands of developers, you need ' +
           'to understand the tools deeper than the vendor documentation covers.',
         tags: ['Java', 'ActiveMQ', 'JVM', 'Debugging'],
@@ -220,7 +220,7 @@ export const experience: ExperienceRole[] = [
           'ownership from development through production operations. Small team ' +
           'environment provided the foundation for later platform engineering work.',
         context:
-          'This was a team of 5 people building a complete business system from scratch — ' +
+          'This was a team of 5 people building a complete business system from scratch - ' +
           'inventory management, invoicing, webshop, government tax integration, everything. ' +
           'I handled coding plus light operations and automation while a colleague handled ' +
           'coding plus MySQL administration.',
@@ -229,6 +229,28 @@ export const experience: ExperienceRole[] = [
     ],
   },
 ]
+
+export const portfolio = {
+  title: 'AI-Powered Portfolio Platform (mhever.dev)',
+  label: 'Project',
+  description:
+    'Full-stack production deployment - Go API on Azure Functions, React frontend on Azure Static Web Apps, ' +
+    'Anthropic Claude integration, Key Vault secrets management, Table/Blob Storage, Terraform IaC, ' +
+    'GitHub Actions CI/CD. Rate-limited, CORS-hardened, HTTPS-enforced.',
+  context:
+    'I built this during my job search in February 2026 to solve a specific problem: ' +
+    'resumes are static documents that can\'t demonstrate what you actually know. ' +
+    'The AI chat is powered by Claude Haiku via a Go API that loads its system prompt ' +
+    'from Azure Blob Storage - so the AI knows my background in detail and can answer ' +
+    'hiring managers\' questions honestly, including about gaps. The fit assessment ' +
+    'does the same with job descriptions. The entire infrastructure is defined in ' +
+    'Terraform and deployed via GitHub Actions. I chose Azure deliberately since ' +
+    'it\'s my primary platform, and kept costs under $5/month using consumption-tier ' +
+    'Functions and free-tier Static Web Apps. The security hardening wasn\'t optional - ' +
+    'any public-facing site with an API key needs rate limiting, CORS lockdown, and ' +
+    'secrets management done properly. The source code is public on GitHub.',
+  tags: ['Go', 'Azure Functions', 'React', 'Terraform', 'GitHub Actions', 'Claude AI', 'Key Vault'],
+}
 
 export const homelab = {
   title: 'Kubernetes GitOps Pipeline',
@@ -241,7 +263,7 @@ export const homelab = {
   context:
     'I started this in January 2026 specifically to close my Kubernetes knowledge gap. ' +
     'The setup runs on a ThinkCentre M715q (Ryzen 2400GE, 16GB RAM) running k3s. ' +
-    'I\'ve worked through real operational issues — disk pressure taints when the node ' +
+    'I\'ve worked through real operational issues - disk pressure taints when the node ' +
     'ran low on storage, SHA mismatch problems with image reconciliation, and FluxCD ' +
     'configuration challenges. It\'s not production experience, and I\'m upfront about that. ' +
     'But it gives me hands-on understanding of the deployment model, the troubleshooting ' +

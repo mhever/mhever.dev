@@ -26,7 +26,7 @@ resource "azurerm_storage_account" "main" {
   account_replication_type        = "LRS"
   min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
-  # shared_access_key_enabled = false is not possible with azurerm 3.x — the provider
+  # shared_access_key_enabled = false is not possible with azurerm 3.x - the provider
   # uses key auth for Table ACL reads regardless of storage_use_azuread. The Function
   # App uses managed identity (storage_uses_managed_identity = true) and has no key in
   # app_settings, so shared keys are present but never used by the application.
@@ -48,7 +48,7 @@ resource "azurerm_storage_container" "deployments" {
   container_access_type = "private"
 }
 
-# Function App package zip — re-uploaded whenever api/deploy.zip changes
+# Function App package zip - re-uploaded whenever api/deploy.zip changes
 # Build first: cd api && GOOS=linux GOARCH=amd64 go build -o handler . && zip -r deploy.zip handler host.json chat/ fit/ health/ adminlogs/
 resource "azurerm_storage_blob" "function_package" {
   name                   = "handler.zip"
@@ -87,7 +87,7 @@ resource "azurerm_storage_table" "logs" {
 # NOTE: The deployer identity (CI service principal or local user) requires:
 #   - Storage Blob Data Contributor on this storage account
 #   - Key Vault Secrets Officer on the key vault
-# These must be granted manually as a one-time bootstrap step — they cannot be
+# These must be granted manually as a one-time bootstrap step - they cannot be
 # managed by Terraform because the deployer needs them to run Terraform.
 
 # Function App managed identity → storage: blob read/write (for runtime deployment packages + Go code)

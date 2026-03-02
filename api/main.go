@@ -19,7 +19,7 @@ import (
 func loadDotEnv() {
 	f, err := os.Open(".env")
 	if err != nil {
-		return // file doesn't exist or isn't readable — not an error
+		return // file doesn't exist or isn't readable - not an error
 	}
 	defer f.Close()
 
