@@ -5,23 +5,21 @@ Personal portfolio site with AI-powered experience exploration and fit assessmen
 ## Architecture
 
 ```
-┌─────────────────────┐     ┌──────────────────────┐
-│   React Frontend    │────▶│     Go API Server     │
-│  (Azure Static Web) │     │  (Azure Functions)    │
-└─────────────────────┘     └──────────┬───────────┘
+┌─────────────────────┐     ┌─────────────────────┐
+│   React Frontend    │────▶│    Go API Server    │
+│  (Azure Static Web) │     │  (Azure Functions)  │
+└─────────────────────┘     └──────────┬──────────┘
                                        │
-                    ┌──────────────────┼──────────────────┐
-                    │                  │                  │
-              ┌─────▼─────┐   ┌───────▼──────┐   ┌──────▼──────┐
-              │ Azure Key  │   │ Azure Blob   │   │ Azure Table │
-              │   Vault    │   │   Storage    │   │   Storage   │
-              │ (secrets)  │   │ (sys prompt) │   │  (logs)     │
-              └────────────┘   └──────────────┘   └─────────────┘
+              ┌────────────────────────┼────────────────────────┐
+              │                        │                        │
+   ┌──────────┴──────────┐  ┌──────────┴──────────┐  ┌──────────┴──────────┐
+   │   Azure Key Vault   │  │  Azure Blob Storage │  │ Azure Table Storage │
+   │      (secrets)      │  │    (sys prompt)     │  │       (logs)        │
+   └─────────────────────┘  └──────────┬──────────┘  └─────────────────────┘
                                        │
-                                ┌──────▼──────┐
-                                │ Anthropic   │
-                                │   API       │
-                                └─────────────┘
+                            ┌──────────┴──────────┐
+                            │    Anthropic API    │
+                            └─────────────────────┘
 ```
 
 ## What's Here
