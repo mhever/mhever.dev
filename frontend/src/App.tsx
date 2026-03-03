@@ -11,6 +11,7 @@ import Education from './components/Education'
 import AiChat from './components/AiChat'
 import FitAssessment from './components/FitAssessment'
 import Admin from './components/Admin'
+import WhatIBuiltHere from './components/WhatIBuiltHere'
 
 export default function App() {
   const [chatOpen, setChatOpen] = useState(false)
@@ -57,69 +58,75 @@ export default function App() {
       >
         {theme === 'dark' ? '☀ light' : '☾ dark'}
       </button>
-      <div className="container" style={{ paddingTop: '48px', paddingBottom: '80px' }}>
-        <Hero onChatOpen={() => setChatOpen(true)} />
+      <div className="page-layout">
+        <main className="main-column">
+          <Hero onChatOpen={() => setChatOpen(true)} />
 
-        <section className="section">
-          <div className="section-label">Experience</div>
-          <Experience />
-        </section>
+          <section className="section">
+            <div className="section-label">Experience</div>
+            <Experience />
+          </section>
 
-        <section className="section">
-          <div className="section-label">Skills & Expertise</div>
-          <Skills />
-        </section>
+          <section className="section">
+            <div className="section-label">Skills & Expertise</div>
+            <Skills />
+          </section>
 
-        <section className="section">
-          <div className="section-label">Testimonials</div>
-          <Testimonials />
-        </section>
+          <section className="section">
+            <div className="section-label">Testimonials</div>
+            <Testimonials />
+          </section>
 
-        <section className="section">
-          <div className="section-label">Certifications</div>
-          <Certifications />
-        </section>
+          <section className="section">
+            <div className="section-label">Certifications</div>
+            <Certifications />
+          </section>
 
-        <section className="section">
-          <div className="section-label">Projects</div>
-          <HomeLab />
-          <Portfolio />
-        </section>
+          <section className="section">
+            <div className="section-label">Projects</div>
+            <HomeLab />
+            <Portfolio />
+          </section>
 
-        <section id="fit-assessment" className="section">
-          <div className="section-label">Fit Assessment</div>
-          <FitAssessment />
-        </section>
+          <section id="fit-assessment" className="section">
+            <div className="section-label">Fit Assessment</div>
+            <FitAssessment />
+          </section>
 
-        <section className="section">
-          <div className="section-label">Education & Languages</div>
-          <Education />
-        </section>
+          <section className="section">
+            <div className="section-label">Education & Languages</div>
+            <Education />
+          </section>
 
-        <footer style={{
-          padding: '32px 0',
-          textAlign: 'center',
-          color: 'var(--text-muted)',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.7rem',
-          letterSpacing: '0.05em',
-        }}>
-          Built with Go, React, Terraform, and deployed on Azure.{' '}
-          <a href="https://github.com/mhever/mhever.dev" target="_blank" rel="noopener">
-            View source
-          </a>
-          {(import.meta.env.VITE_COMMIT_SHA || import.meta.env.VITE_BUILD_DATE) && (
-            <><br />{
-              import.meta.env.VITE_BUILD_DATE
-                ? new Date(import.meta.env.VITE_BUILD_DATE).toISOString().slice(0, 10)
-                : ''
-            }{import.meta.env.VITE_BUILD_DATE && import.meta.env.VITE_COMMIT_SHA ? ' · ' : ''}{
-              import.meta.env.VITE_COMMIT_SHA
-                ? import.meta.env.VITE_COMMIT_SHA.slice(0, 7)
-                : ''
-            }</>
-          )}
-        </footer>
+          <footer style={{
+            padding: '32px 0',
+            textAlign: 'center',
+            color: 'var(--text-muted)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.7rem',
+            letterSpacing: '0.05em',
+          }}>
+            Built with Go, React, Terraform, and deployed on Azure.{' '}
+            <a href="https://github.com/mhever/mhever.dev" target="_blank" rel="noopener">
+              View source
+            </a>
+            {(import.meta.env.VITE_COMMIT_SHA || import.meta.env.VITE_BUILD_DATE) && (
+              <><br />{
+                import.meta.env.VITE_BUILD_DATE
+                  ? new Date(import.meta.env.VITE_BUILD_DATE).toISOString().slice(0, 10)
+                  : ''
+              }{import.meta.env.VITE_BUILD_DATE && import.meta.env.VITE_COMMIT_SHA ? ' · ' : ''}{
+                import.meta.env.VITE_COMMIT_SHA
+                  ? import.meta.env.VITE_COMMIT_SHA.slice(0, 7)
+                  : ''
+              }</>
+            )}
+          </footer>
+        </main>
+
+        <aside className="sidebar-column">
+          <WhatIBuiltHere />
+        </aside>
       </div>
 
       {chatOpen && <AiChat onClose={() => setChatOpen(false)} />}

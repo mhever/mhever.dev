@@ -580,6 +580,151 @@ code, pre {
   background: var(--text-muted);
 }
 
+/* ───── Page Layout (Two-Column) ───── */
+
+.page-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 336px;
+  gap: 0 48px;
+  align-items: start;
+}
+
+.main-column {
+  min-width: 0;
+}
+
+.sidebar-column {
+  position: sticky;
+  top: 24px;
+}
+
+@media (max-width: 1100px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+    max-width: 860px;
+  }
+
+  .sidebar-column {
+    position: static;
+  }
+}
+
+/* ───── What I Built Here Sidebar ───── */
+
+.wibu-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.wibu-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.wibu-intro {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: none;
+}
+
+.wibu-intro strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.wibu-block {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.wibu-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.wibu-diagram {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  white-space: pre;
+  background: var(--bg-primary);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.wibu-tech-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.wibu-tech-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.wibu-tech-name {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.wibu-tech-reason {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.wibu-cost-total {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--success);
+  margin-bottom: 10px;
+}
+
+.wibu-cost-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wibu-cost-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.wibu-cost-line span:last-child {
+  color: var(--text-secondary);
+}
+
 /* ───── Admin Page ───── */
 
 .admin-login {
