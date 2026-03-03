@@ -32,6 +32,25 @@ Azure Static Web Apps
       </div>
 
       <div className="wibu-block">
+        <div className="wibu-subtitle">Monthly cost</div>
+        <div className="wibu-cost-total">~$4/mo</div>
+        <div className="wibu-cost-breakdown">
+          <div className="wibu-cost-line">
+            <span>Static Web Apps</span><span>free</span>
+          </div>
+          <div className="wibu-cost-line">
+            <span>Azure Functions</span><span>~$0.40</span>
+          </div>
+          <div className="wibu-cost-line">
+            <span>Key Vault + Storage</span><span>~$0.05</span>
+          </div>
+          <div className="wibu-cost-line">
+            <span>Anthropic API (Haiku)</span><span>usage-based</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="wibu-block">
         <div className="wibu-subtitle">Why each piece</div>
 
         <div className="wibu-tech-item">
@@ -57,25 +76,6 @@ Azure Static Web Apps
         <div className="wibu-tech-item">
           <span className="wibu-tech-name">Claude Haiku</span>
           <span className="wibu-tech-reason">Cost-efficient for interactive chat. Sonnet-quality unnecessary at this scale.</span>
-        </div>
-      </div>
-
-      <div className="wibu-block">
-        <div className="wibu-subtitle">Monthly cost</div>
-        <div className="wibu-cost-total">~$4/mo</div>
-        <div className="wibu-cost-breakdown">
-          <div className="wibu-cost-line">
-            <span>Static Web Apps</span><span>free</span>
-          </div>
-          <div className="wibu-cost-line">
-            <span>Azure Functions</span><span>~$0.40</span>
-          </div>
-          <div className="wibu-cost-line">
-            <span>Key Vault + Storage</span><span>~$0.05</span>
-          </div>
-          <div className="wibu-cost-line">
-            <span>Anthropic API</span><span>usage-based</span>
-          </div>
         </div>
       </div>
 
