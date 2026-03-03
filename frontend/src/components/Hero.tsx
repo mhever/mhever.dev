@@ -53,7 +53,7 @@ export default function Hero({ onChatOpen }: HeroProps) {
       </div>
 
       {/* Actions */}
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
         <button className="btn btn-accent" onClick={onChatOpen}>
           <span style={{ fontSize: '1rem' }}>⟩</span>
           Ask AI about my experience
@@ -67,6 +67,9 @@ export default function Hero({ onChatOpen }: HeroProps) {
         </a>
         <a className="btn" href={`mailto:${profile.email}`}>
           Email
+        </a>
+        <a className="btn" href={profile.github} target="_blank" rel="noopener">
+          GitHub source
         </a>
       </div>
     </section>

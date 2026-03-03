@@ -7,6 +7,7 @@ export const profile = {
   status: 'Permanent Resident',
   availability: 'Remote / Local',
   linkedin: 'https://www.linkedin.com/in/marton-hever/',
+  github: 'https://github.com/mhever',
   email: 'marton.hever@gmail.com',
   summary:
     'Platform Engineer with 7+ years in regulated Azure environments. ' +

@@ -7,7 +7,7 @@ export default function WhatIBuiltHere() {
         href="https://github.com/mhever/mhever.dev"
         target="_blank"
         rel="noopener"
-        className="btn"
+        className="btn btn-ghost"
         style={{ width: '100%', justifyContent: 'center', marginBottom: '16px' }}
       >
         ↗ View source on GitHub
