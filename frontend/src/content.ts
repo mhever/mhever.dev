@@ -13,7 +13,7 @@ export const profile = {
     'Platform Engineer with 7+ years in regulated Azure environments. ' +
     'Specializing in Go automation, Terraform IaC, and enterprise CI/CD ' +
     'at 2,000+-engineer scale. Recently expanded expertise into Kubernetes ' +
-    'and cloud-native patterns.',
+    'and cloud-native patterns, and AI agent infrastructure (MCP).',
 }
 
 export const technologies = {
@@ -22,7 +22,7 @@ export const technologies = {
     'CI/CD', 'Packer', 'Bash',
   ],
   secondary: [
-    'Kubernetes', 'DevSecOps', 'Azure Networking', 'Camunda Zeebe',
+    'Kubernetes', 'MCP', 'DevSecOps', 'Azure Networking', 'Camunda Zeebe',
     'Java', 'TypeScript',
   ],
   observability: [
@@ -51,6 +51,8 @@ export const skills = {
   ],
   moderate: [
     'Kubernetes (k3s home lab)',
+    'MCP server development',
+    'Multi-model AI orchestration',
     'Azure Networking (AZ-700)',
     'Azure Security (AZ-500)',
     'Camunda Zeebe orchestration',
@@ -253,12 +255,57 @@ export const portfolio = {
   tags: ['Go', 'Azure Functions', 'React', 'Terraform', 'GitHub Actions', 'Claude AI', 'Key Vault'],
 }
 
+export const homelabMcp = {
+  title: 'Home Lab Operations MCP Server (homelab-mcp)',
+  label: 'Project',
+  description:
+    'Go MCP server exposing k3s, Docker, and system metrics through a single interface. ' +
+    '10 tools, 25 tests, official MCP Go SDK. Built using multi-model agent orchestration ' +
+    '(Claude, DeepSeek, Gemini). GitHub Actions CI.',
+  context:
+    'Unlike the 60+ existing Kubernetes-only MCP servers, this one is opinionated about ' +
+    'a real mixed-workload home lab: k3s cluster, Docker containers (Home Assistant, ' +
+    'torrent server, minidlna), and bare-metal system metrics through a single interface. ' +
+    'Claude Desktop connects over SSH and invokes the binary directly. Graceful degradation ' +
+    'means if Docker or k8s aren\'t available at startup, those tools simply aren\'t registered. ' +
+    'The interesting part is how it was built: Claude Sonnet orchestrates but does not write ' +
+    'production code. DeepSeek V3/V3.2 generates code via bash shims over OpenRouter, ' +
+    'DeepSeek R1 reviews it, and Gemini Flash-Lite handles tests and docs. Total DeepSeek ' +
+    'cost for the entire project: $0.05. The setup was deliberately over-scoped for learning. ' +
+    'Two subagent roles would have been sufficient, but four were used to gain hands-on ' +
+    'experience with multi-vendor orchestration. R1 in reviewer mode caught real bugs that ' +
+    'V3 in builder mode missed: unguarded slice access, unbounded memory allocation, and ' +
+    'blocking contexts with no timeout.',
+  tags: ['Go', 'MCP', 'Kubernetes', 'Docker', 'DeepSeek', 'Multi-agent AI'],
+}
+
+export const gitopsRemediator = {
+  title: 'Agentic GitOps Remediator (gitops-remediator)',
+  label: 'Project',
+  description:
+    'Go service that watches Kubernetes for failure events, uses DeepSeek R1 for ' +
+    'LLM-assisted diagnosis, and opens GitHub PRs against the GitOps repo with proposed fixes. ' +
+    'FluxCD reconciles the merged PR. Loop closed.',
+  context:
+    'This takes the agentic pattern further than the MCP server. It watches a dedicated ' +
+    'test namespace for OOMKilled, CrashLoopBackOff, and ImagePullBackOff events, assembles ' +
+    'a diagnostic bundle (pod spec, logs, events, resource limits) with env var values ' +
+    'redacted for PII, sends it to DeepSeek R1 for root cause analysis, and opens a PR ' +
+    'with the proposed fix. The key design decision: PRs over direct kubectl apply, because ' +
+    'direct patching creates drift between Git and the cluster. The PR is the artifact. ' +
+    'Non-remediable failures (code panics, auth issues) are explicitly escalated rather than ' +
+    'patched, because knowing when NOT to act is as important as knowing when to act. ' +
+    'Prometheus metrics track failures detected, PRs opened, escalations, and diagnostician ' +
+    'latency. The homelab-mcp server is used as a real-time monitor during testing.',
+  tags: ['Go', 'Kubernetes', 'GitOps', 'FluxCD', 'DeepSeek R1', 'Agentic AI'],
+}
+
 export const homelab = {
   title: 'Kubernetes GitOps Pipeline',
   label: 'Home Lab',
   description:
     'Built and operated a k3s-based GitOps deployment pipeline ' +
-    '(GitHub Actions → GitHub Container Registry → FluxCD/Kustomize) ' +
+    '(GitHub Actions \u2192 GitHub Container Registry \u2192 FluxCD/Kustomize) ' +
     'deploying a containerized Go application with immutable image tags, ' +
     'automated rollouts, and real incident resolution.',
   context:
@@ -268,13 +315,13 @@ export const homelab = {
     'ran low on storage, SHA mismatch problems with image reconciliation, and FluxCD ' +
     'configuration challenges. It\'s not production experience, and I\'m upfront about that. ' +
     'But it gives me hands-on understanding of the deployment model, the troubleshooting ' +
-    'patterns, and the GitOps workflow. My next steps are adding RBAC, Ingress controllers, ' +
-    'Prometheus/Grafana monitoring, and Helm charts.',
+    'patterns, and the GitOps workflow. This cluster now also runs the homelab-mcp server ' +
+    'and serves as the test environment for the gitops-remediator.',
   tags: ['Kubernetes', 'k3s', 'FluxCD', 'Kustomize', 'GitHub Actions'],
 }
 
 export const education = [
-  { degree: 'MSc, Computer Science Engineering', school: 'Széchényi István University, Hungary', year: '2013' },
+  { degree: 'MSc, Computer Science Engineering', school: 'Sz\u00e9ch\u00e9nyi Istv\u00e1n University, Hungary', year: '2013' },
   { degree: 'BSc, Computer Science Engineering', school: 'Pannon University, Hungary', year: '2011' },
 ]
 
@@ -285,11 +332,11 @@ export const languages = [
 ]
 
 export const chatSuggestions = [
-  "Tell me about a time vendor support couldn't help",
+  'What is the homelab-mcp project and how was it built?',
+  'Tell me about the multi-model AI orchestration setup',
   'What kind of production systems have you built?',
   'Tell me about your Go experience',
-  'How do you handle Kubernetes gaps?',
   'What was your role at Swiss Re?',
-  'Describe a difficult technical decision',
-  'How do you keep critical infrastructure stable at scale?',
+  'How do you handle Kubernetes gaps honestly?',
+  'What does the GitOps remediator do?',
 ]

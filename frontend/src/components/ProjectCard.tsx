@@ -1,22 +1,29 @@
 import { useState } from 'react'
-import { portfolio } from '../content'
 
-export default function Portfolio() {
+type ProjectCardContent = {
+  label: string
+  title: string
+  description: string
+  tags: string[]
+  context: string
+}
+
+export default function ProjectCard({ content }: { content: ProjectCardContent }) {
   const [open, setOpen] = useState(false)
 
   return (
     <div className="card">
       <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span className="tag">{portfolio.label}</span>
-        <h3 style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>{portfolio.title}</h3>
+        <span className="tag">{content.label}</span>
+        <h3 style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }}>{content.title}</h3>
       </div>
 
       <p style={{ fontSize: '0.875rem', lineHeight: '1.65', marginBottom: '10px' }}>
-        {portfolio.description}
+        {content.description}
       </p>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
-        {portfolio.tags.map((tag) => (
+        {content.tags.map((tag) => (
           <span key={tag} className="tag">{tag}</span>
         ))}
       </div>
@@ -28,7 +35,7 @@ export default function Portfolio() {
 
       <div className={`expandable ${open ? 'expanded' : 'collapsed'}`}>
         <div className="context-content">
-          {portfolio.context}
+          {content.context}
         </div>
       </div>
     </div>

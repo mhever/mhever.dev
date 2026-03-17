@@ -5,8 +5,8 @@ import Experience from './components/Experience'
 import Skills from './components/Skills'
 import Testimonials from './components/Testimonials'
 import Certifications from './components/Certifications'
-import HomeLab from './components/HomeLab'
-import Portfolio from './components/Portfolio'
+import ProjectCard from './components/ProjectCard'
+import { portfolio, homelabMcp, gitopsRemediator, homelab } from './content'
 import Education from './components/Education'
 import AiChat from './components/AiChat'
 import FitAssessment from './components/FitAssessment'
@@ -84,8 +84,10 @@ export default function App() {
 
           <section className="section">
             <div className="section-label">Projects</div>
-            <HomeLab />
-            <Portfolio />
+            <ProjectCard content={gitopsRemediator} />
+            <ProjectCard content={homelabMcp} />
+            <ProjectCard content={portfolio} />
+            <ProjectCard content={homelab} />
           </section>
 
           <section id="fit-assessment" className="section">
